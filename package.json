@@ -1,0 +1,33 @@
+{
+  "name": "workshop-cartographie",
+  "version": "1.0.0",
+  "description": "Workshop Cartographie - Academie Charpentier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/violy/workshop-cartographie.git"
+  },
+  "keywords": [
+    "cartography",
+    "art",
+    "drawing",
+    "js",
+    "map",
+    "leaflet"
+  ],
+  "author": "Arthur Violy <arthur@violy.net>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/violy/workshop-cartographie/issues"
+  },
+  "homepage": "https://github.com/violy/workshop-cartographie#readme",
+  "dependencies": {
+    "canvas": "^1.6.2",
+    "express": "^4.14.1",
+    "image-size": "^0.5.1",
+    "mkdirp": "^0.5.1"
+  }
+}

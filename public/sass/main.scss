@@ -1,0 +1,33 @@
+@import "compass/css3/box-sizing";
+@import "../bower_components/reset-css/reset";
+@import "variables";
+
+body{
+  font-family: $font-family-monospace;
+  font-size:16px;
+  color:$black;
+}
+
+.page{
+  @include box-sizing(border-box);
+  margin: 20px;
+  border: 2px solid $black;
+  height:100%;
+  min-height: calc(100vh - 20px * 2);
+  header{
+    padding: 20px;
+  }
+  position: relative;
+}
+
+h1{
+  font-size:2rem;
+}
+
+#map{
+  display: block;
+  width:100%;
+  height:calc(100% - 88px);
+  position: absolute;
+  background: $dark-grey;
+}
