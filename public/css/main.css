@@ -2,6 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@import url("https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i&subset=latin-ext");
 /* line 6, ../bower_components/reset-css/_reset.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -57,14 +58,14 @@ table {
   border-spacing: 0;
 }
 
-/* line 5, ../sass/main.scss */
+/* line 7, ../sass/main.scss */
 body {
   font-family: "Space Mono", monospace;
   font-size: 16px;
   color: #303030;
 }
 
-/* line 11, ../sass/main.scss */
+/* line 13, ../sass/main.scss */
 .page {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -75,17 +76,17 @@ body {
   min-height: calc(100vh - 20px * 2);
   position: relative;
 }
-/* line 17, ../sass/main.scss */
+/* line 19, ../sass/main.scss */
 .page header {
   padding: 20px;
 }
 
-/* line 23, ../sass/main.scss */
+/* line 25, ../sass/main.scss */
 h1 {
   font-size: 2rem;
 }
 
-/* line 27, ../sass/main.scss */
+/* line 29, ../sass/main.scss */
 #map {
   display: block;
   width: 100%;
