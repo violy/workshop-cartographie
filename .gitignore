@@ -46,3 +46,4 @@ bower_components
 images/*
 public/img/*
 .cache
+server-config.json

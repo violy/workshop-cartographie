@@ -15,5 +15,6 @@ RUN cd /opt/node/js \
 
 COPY ./public /opt/node/js/public
 COPY ./index.js /opt/node/js/index.js
+COPY ./server-config.json /opt/node/js/server-config.json
 
 ENTRYPOINT ["node","index"]

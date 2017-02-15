@@ -1,0 +1,6 @@
+{
+  "port":3333,
+  "TILE_SIZE":256,
+  "cacheRoot":".cache/",
+  "emptyTileSrc":"empty.png"
+}
