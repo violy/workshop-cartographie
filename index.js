@@ -4,12 +4,13 @@ var mkdirp = require('mkdirp');
 var imageSize = require('image-size');
 var Canvas = require('canvas'),
     Image = Canvas.Image;
+var config = require('./server-config.json');
 var app = express();
-var port = 3333;
+var port = config.port;
 
-var TILE_SIZE = 256,
-    cacheRoot = '.cache/',
-    emptyTileSrc = 'empty.png';
+var TILE_SIZE = config.TILE_SIZE,
+    cacheRoot = config.cacheRoot,
+    emptyTileSrc = config.emptyTileSrc;
 
 var imageOriginSrc, // référence unique
     imageOrigin; // référence unique utilisée comme pseudo-cache
