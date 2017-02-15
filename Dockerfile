@@ -13,6 +13,8 @@ WORKDIR /opt/node/js
 RUN cd /opt/node/js \
     && npm install
 
+EXPOSE 80
+
 COPY ./public /opt/node/js/public
 COPY ./index.js /opt/node/js/index.js
 COPY ./server-config.json /opt/node/js/server-config.json
