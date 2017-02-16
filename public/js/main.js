@@ -6,12 +6,14 @@ $(document).ready(function(){
         CRSHeight = 1000,
         offsetX = (baseWidth-CRSWidth)/2,
         offsetY = (baseHeight-CRSHeight)/2,
-        host = window.location.host;
+        host = window.location.host,
+        cdnHost = '{s}.cdn.'+host,
+        tileTemplate = 'http://'+host+'/tile/{z}/{x}/{y}';
 
 
     var bounds = [[0,0],[baseHeight,baseWidth]];
 
-    var tileLayer = L.tileLayer('http://{s}.cdn.'+host+'/tile/{z}/{x}/{y}',
+    var tileLayer = L.tileLayer(cdnTemplate,
         {
             foo:'bar',
             subdomains:'abcdef',
