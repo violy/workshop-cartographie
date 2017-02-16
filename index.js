@@ -16,9 +16,11 @@ var imageOriginSrc, // référence unique
     imageOrigin; // référence unique utilisée comme pseudo-cache
 
 // génère une image vide et la met en cache
-var canvas = new Canvas(TILE_SIZE, TILE_SIZE),
-    ctx = canvas.getContext('2d');
-fs.writeFile(cacheRoot+emptyTileSrc,canvas.toBuffer());
+mkdirp(cacheRoot, function (err) {
+    var canvas = new Canvas(TILE_SIZE, TILE_SIZE),
+        ctx = canvas.getContext('2d');
+    fs.writeFile(cacheRoot + emptyTileSrc, canvas.toBuffer());
+});
 
 app.use(express.static('public'));
 
