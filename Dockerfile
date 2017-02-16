@@ -13,7 +13,11 @@ WORKDIR /opt/node/js
 RUN cd /opt/node/js \
     && npm install
 
+LABEL maintainer "arthur@violy.net"
+
 EXPOSE 80
+
+VOLUME /opt/node/js/images
 
 COPY ./public /opt/node/js/public
 COPY ./index.js /opt/node/js/index.js
