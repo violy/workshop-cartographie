@@ -13,7 +13,7 @@ $(document).ready(function(){
 
     var bounds = [[0,0],[baseHeight,baseWidth]];
 
-    var tileLayer = L.tileLayer(cdnTemplate,
+    var tileLayer = L.tileLayer(tileTemplate,
         {
             foo:'bar',
             subdomains:'abcdef',
