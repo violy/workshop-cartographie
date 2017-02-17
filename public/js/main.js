@@ -8,7 +8,8 @@ $(document).ready(function(){
         offsetY = (baseHeight-CRSHeight)/2,
         host = window.location.host,
         cdnHost = '{s}.cdn.'+host,
-        tileTemplate = 'http://'+host+'/tile/{z}/{x}/{y}';
+        cdnSubdomains = 'abcdef',
+        tileTemplate = 'http://'+cdnHost+'/tile/{z}/{x}/{y}';
 
 
     var bounds = [[0,0],[baseHeight,baseWidth]];
@@ -16,7 +17,7 @@ $(document).ready(function(){
     var tileLayer = L.tileLayer(tileTemplate,
         {
             foo:'bar',
-            subdomains:'abcdef',
+            subdomains:cdnSubdomains,
             minZoom:-6,
             maxZoom:0,
             maxNativeZoom:0,
