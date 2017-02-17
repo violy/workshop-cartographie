@@ -75,27 +75,34 @@ app.get('/tile/:z/:x/:y', function (req, res) {
         res.sendFile(cacheFilePath, {maxAge: '1d', root: __dirname}, function (err) {
             if (err) {
                 console.log('cache not exists', cacheFilePath);
-                var canvas = new Canvas(TILE_SIZE, TILE_SIZE),
+                try {
+
+                    var canvas = new Canvas(TILE_SIZE, TILE_SIZE),
                     ctx = canvas.getContext('2d'),
                     imgSrc,
                     img = new Image();
 
-                if (imageOriginSrc != fileName) {
-                    console.log('imageOrigin source --> %s', fileName);
-                    imageOriginSrc = fileName;
-                    imageOrigin = fs.readFileSync(srcFilePath);
+                    if (imageOriginSrc != fileName) {
+                        console.log('imageOrigin source --> %s', fileName);
+                        imageOriginSrc = fileName;
+                        imageOrigin = fs.readFileSync(srcFilePath);
+                    }
+                    imgSrc = imageOrigin;
+
+                    img.src = imgSrc;
+
+                    console.log('x %s y %s z %s scale %s maxZoom %s', x, y, z, scale, maxZoom);
+                    console.log('Tile ', fileName, img.width, img.height);
+                    // now, lets draw the tile
+
+                        ctx.drawImage(img, offsetX, offsetY, TILE_SIZE * scale, TILE_SIZE * scale, 0, 0, TILE_SIZE, TILE_SIZE);
+                        // and transform it into a binary buffer, so we can
+                        // deliver it to the client
+                        EndImage(canvas, cacheFilePath, cachePath);
+                }catch(err){
+                    console.log(err);
+                    res.status(404).end();
                 }
-                imgSrc = imageOrigin;
-
-                img.src = imgSrc;
-
-                console.log('x %s y %s z %s scale %s maxZoom %s', x, y, z, scale, maxZoom);
-                console.log('Tile ', fileName, img.width, img.height);
-                // now, lets draw the tile
-                ctx.drawImage(img, offsetX, offsetY, TILE_SIZE * scale, TILE_SIZE * scale, 0, 0, TILE_SIZE, TILE_SIZE);
-                // and transform it into a binary buffer, so we can
-                // deliver it to the client
-                EndImage(canvas,cacheFilePath,cachePath);
             }
         });
     }else{
