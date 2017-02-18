@@ -10,7 +10,7 @@ $(document).ready(function(){
         host = window.location.host,
         cdnHost = '{s}.cdn.'+host,
         cdnSubdomains = 'abcdef',
-        tileTemplate = 'http://'+cdnHost+'/tile/{z}/{x}/{y}';
+        tileTemplate = 'http://'+cdnHost+'/tile/{s}/{z}/{x}/{y}';
 
 
     var bounds = [[0,0],[baseHeight,baseWidth]];

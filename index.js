@@ -29,7 +29,7 @@ app.use(express.static('public'));
 
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));
 
-app.get('/tile/:z/:x/:y', function (req, res) {
+app.get('/tile/:n/:z/:x/:y', function (req, res) {
     console.log(req.params);
     var x = parseFloat(req.params.x),
         y = parseFloat(req.params.y),
