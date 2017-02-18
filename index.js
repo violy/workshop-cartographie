@@ -50,7 +50,7 @@ app.get('/tile/:z/:x/:y', function (req, res) {
         offsetY = (y) * scaledTile + centerY,
         contain = offsetX > -scaledTile && offsetX<srcSize.width && offsetY > -scaledTile && offsetY<srcSize.height;
 
-    console.log(offsetX > -scaledTile , offsetX<srcSize.width , offsetY > -scaledTile , offsetY<srcSize.height);
+    // console.log(offsetX > -scaledTile , offsetX<srcSize.width , offsetY > -scaledTile , offsetY<srcSize.height);
 
     function EndImage(canvas,filePath,dirPath){
         canvas.toBuffer(function (err, buf) {

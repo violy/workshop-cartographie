@@ -4,6 +4,7 @@ $(document).ready(function(){
         baseHeight = 7590,
         CRSWidth = 1000,
         CRSHeight = 1000,
+        maxBounds = [[-baseHeight/2,-baseWidth/2],[baseHeight/2,baseWidth/2]],
         offsetX = (baseWidth-CRSWidth)/2,
         offsetY = (baseHeight-CRSHeight)/2,
         host = window.location.host,
@@ -28,13 +29,13 @@ $(document).ready(function(){
     var map = L.map('map', {
         attributionControl:false, // cache l’attribution Leaflet
         crs: L.CRS.Simple, // Coordinate Reference System
-        //maxBounds:bounds,
+        maxBounds:maxBounds,
         minZoom:-5,
         maxZoom:0,
         layers:[tileLayer],
     });
 
-    map.fitBounds([[0,0],[1000,1000]]);
+    map.fitBounds(maxBounds);
 
 
     //
