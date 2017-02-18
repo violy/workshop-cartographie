@@ -34,6 +34,8 @@ do
 
     echo -e "${BLUE}Starting container ${CONTAINER}${HOSTNAME}${GREEN}"
     docker run -d \
+    --cpus=0.15 \
+    --memory="512M" \
     -v $(pwd)/images:/opt/node/js/images \
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \
