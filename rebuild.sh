@@ -9,7 +9,8 @@ RESET="\033[0m"
 
 
 
-ORIGINS=("a." "b." "c." "")
+# ORIGINS=("a." "b." "c." "")
+ORIGINS=("")
 HOSTNAME="origin.atlas.violy.fr"
 
 # récupère la derniere version git
@@ -40,7 +41,7 @@ do
     -v $(pwd)/images:/opt/node/js/images \
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \
-    -e VIRTUAL_HOST=${CONTAINER}${HOSTNAME} \
+    --hostname ${CONTAINER}${HOSTNAME} \
     --name ${CONTAINER}${HOSTNAME} \
     workshop-cartographie
 

@@ -94,3 +94,55 @@ h1 {
   position: absolute;
   background: #EEEEEE;
 }
+
+/* line 2, ../sass/_new.scss */
+.upload label {
+  display: none;
+}
+/* line 4, ../sass/_new.scss */
+.upload label.current {
+  display: block;
+}
+/* line 8, ../sass/_new.scss */
+.upload input {
+  display: block;
+  width: 100%;
+  font-family: "Space Mono", monospace;
+  font-size: 16px;
+  border: none;
+  background: #fff;
+  outline: none;
+}
+/* line 16, ../sass/_new.scss */
+.upload input[type=submit] {
+  background: #F1F1F1;
+}
+/* line 20, ../sass/_new.scss */
+.upload.initial {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 300px;
+  height: 4.5em;
+  padding: 2em;
+}
+/* line 32, ../sass/_new.scss */
+.upload small {
+  font-size: .75em;
+  display: inline-block;
+  line-height: 1.25em;
+  margin: .25em 0 .5em;
+}
+/* line 38, ../sass/_new.scss */
+.upload input[type=file] {
+  position: absolute;
+  width: 100%;
+  height: 6%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}

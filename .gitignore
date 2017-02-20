@@ -47,3 +47,4 @@ images/*
 public/img/*
 .cache
 server-config.json
+uploads/*

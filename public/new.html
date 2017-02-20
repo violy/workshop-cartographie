@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Workshop Cartographie - Arthur Violy - 2017 - Académie Charpentier</title>
+    <link rel="stylesheet" href="vendors/leaflet/leaflet.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="vendors/jquery.min.js"></script>
+    <script src="vendors/leaflet/leaflet.js"></script>
+    <script src="js/new.js"></script>
+</head>
+<body>
+<div class="page">
+    <header>
+        <h1>Workshop Cartographie</h1>
+        <h2>Arthur Violy - 2017 - Académie Charpentier</h2>
+    </header>
+    <figure id="map">
+        <form id="new-form" action="/upload" method="post" enctype="multipart/form-data">
+            <fieldset class="upload initial">
+                <input type="hidden" name="type" value="initial" />
+                <label class="current">
+                    Auteur :
+                    <input type="text" name="author" placeholder="Prénom et nom" />
+                </label>
+                <label>
+                    Titre :
+                    <input type="text" name="title" placeholder="..." />
+                </label>
+                <label>
+                    Selectionnez le fichier <small>de votre carte,
+                    en premier celui dans la plus haute définition.</small>
+                    <input id="upload" name="upload" type="file" />
+                </label>
+                <input type="submit">
+            </fieldset>
+        </form>
+    </figure>
+</div>
+
+</body>
+</html>

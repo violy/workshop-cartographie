@@ -1,17 +1,27 @@
-var express = require('express');
-var fs = require('fs');
-var mkdirp = require('mkdirp');
+var config = require('./server-config.json');
+var TILE_SIZE = config.TILE_SIZE,
+    cacheRoot = config.cacheRoot,
+    uploadRoot = config.uploadRoot,
+    emptyTileSrc = config.emptyTileSrc,
+    sourceFile = config.sourceFile,
+    _SHA_HASH_ = config.SHA_HASH;
+
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    multer = require('multer'),
+    upload = multer(); // for parsing multipart/form-data
+
+var fs = require('fs'),
+    mkdirp = require('mkdirp');
+
+var sha1 = require('sha1');
+
 var imageSize = require('image-size');
 var Canvas = require('canvas'),
     Image = Canvas.Image;
-var config = require('./server-config.json');
 var app = express();
 var port = config.port;
 
-var TILE_SIZE = config.TILE_SIZE,
-    cacheRoot = config.cacheRoot,
-    emptyTileSrc = config.emptyTileSrc,
-    sourceFile = config.sourceFile;
 
 var imageOriginSrc, // référence unique
     imageOrigin; // référence unique utilisée comme pseudo-cache
@@ -25,7 +35,51 @@ mkdirp(cacheRoot, function (err) {
     });
 });
 
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 app.use(express.static('public'));
+app.use('/new',express.static('public/new.html'));
+
+app.post('/upload', upload.single('upload'), function(req,res){
+    console.log(req.body);
+    console.log(req.file);
+    var imageType = false,
+        originalname = req.file.originalname,
+        imageUid = sha1(originalname+_SHA_HASH_),
+        imageDir = uploadRoot+imageUid+'/';
+    switch(req.file.mimetype.toLowerCase()){
+        case 'image/jpeg':
+            imageType = 'jpg';
+            break;
+        case 'image/png':
+            imageType = 'png';
+            break;
+    }
+    if(imageType && req.file.buffer.length>0){
+        mkdirp(imageDir,function(err){
+            if(err) throw err;
+            var filePath = imageDir+'layer0.'+imageType,
+                metaPath = imageDir+'metadata.json';
+
+            fs.writeFile(filePath,req.file.buffer,function(err){
+                if(err) throw err;
+                var metaData = imageSize(filePath);
+                    metaData.originalname = originalname;
+                    metaData.mimetype = req.file.mimetype;
+                    metaData.size = req.file.size;
+                    metaData.encoding = req.file.encoding;
+                    metaData.author = req.body.author;
+                    metaData.title = req.body.title;
+                    metaData.dateadd= new Date();
+                metaData.uid = imageUid;
+                fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
+                    res.json(metaData);
+                })
+            });
+        });
+    }
+});
 
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));
 
@@ -48,9 +102,12 @@ app.get('/tile/:n/:z/:x/:y', function (req, res) {
         scaledTile = scale * TILE_SIZE,
         offsetX = (x) * scaledTile + centerX,
         offsetY = (y) * scaledTile + centerY,
-        contain = offsetX > -scaledTile && offsetX<srcSize.width && offsetY > -scaledTile && offsetY<srcSize.height;
+        contain = offsetX > -scaledTile && offsetX<srcSize.width && offsetY > -scaledTile && offsetY<srcSize.height,
+        border = contain && (offsetX < 0 || offsetX > srcSize.width || offsetY < 0 || offsetY > srcSize.height);
 
-    // console.log(offsetX > -scaledTile , offsetX<srcSize.width , offsetY > -scaledTile , offsetY<srcSize.height);
+    console.log(offsetX,offsetY,srcSize,scaledTile);
+    console.log(offsetX > -scaledTile , offsetX<srcSize.width , offsetY > -scaledTile , offsetY<srcSize.height);
+    console.log("contain %s, border %s",contain,border);
 
     function EndImage(canvas,filePath,dirPath){
         canvas.toBuffer(function (err, buf) {
