@@ -78,6 +78,7 @@ app.post('/upload', upload.single('upload'), function(req,res){
                     metaData.dateadd= new Date();
                     metaData.uid = imageUid;
                     metaData.minZoom = MaxZoom(metaData.width,metaData.height);
+                console.log(metaData);
                 fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
                     res.json(metaData);
                 })
