@@ -6,6 +6,8 @@ $(document).ready(function(){
         baseHeight = 7590,
         CRSWidth = 1000,
         CRSHeight = 1000,
+        meta,
+        minZoom = -5,
         host = location.host,
         cdnHost = '{s}.cdn.' + host,
         cdnSubdomains = 'abcdef',
@@ -20,12 +22,17 @@ $(document).ready(function(){
             url:'/meta/'+uid,
             dataType:'json'
         }).done(function(data){
+            meta = data;
             baseWidth = data.width;
             baseHeight = data.height;
             tileTemplate += '/'+uid;
+            minZoom = -data.minZoom;
+            console.log(minZoom)
+            $('header h2').text(meta.author+' / '+meta.title);
             Setup();
         }).fail(Fail)
     }else{
+        tileTemplate += '/default';
         Setup();
     }
 
@@ -53,7 +60,7 @@ $(document).ready(function(){
             attributionControl: false, // cache l’attribution Leaflet
             crs: L.CRS.Simple, // Coordinate Reference System
             maxBounds: maxBounds,
-            minZoom: -5,
+            minZoom: minZoom,
             maxZoom: 0,
             layers: [tileLayer],
         });

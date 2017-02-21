@@ -35,6 +35,10 @@ mkdirp(cacheRoot, function (err) {
     });
 });
 
+function MaxZoom(width,height){
+    return Math.round(Math.max(Math.sqrt(width/TILE_SIZE), Math.sqrt(height/TILE_SIZE))-1)
+}
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -72,7 +76,8 @@ app.post('/upload', upload.single('upload'), function(req,res){
                     metaData.author = req.body.author;
                     metaData.title = req.body.title;
                     metaData.dateadd= new Date();
-                metaData.uid = imageUid;
+                    metaData.uid = imageUid;
+                    metaData.minZoom = MaxZoom(metaData.width,metaData.height);
                 fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
                     res.json(metaData);
                 })
@@ -111,19 +116,20 @@ app.use('/meta/:uid',function(req,res,next){
 
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));
 
-app.get('/tile/:n/:z/:x/:y', function (req, res) {
+app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
     console.log(req.params);
     var x = parseFloat(req.params.x),
         y = parseFloat(req.params.y),
-        z = parseFloat(req.params.z);
+        z = parseFloat(req.params.z),
+        uid = req.params.uid;
 
-    var fileName = sourceFile,
-        srcPath = 'images/',
+    var fileName = 'layer0.jpg',
+        srcPath = uploadRoot+uid+'/',
         srcFilePath = srcPath+fileName,
         cachePath = cacheRoot + z + '/' + x + '/' + y + '/',
-        cacheFilePath = cachePath+fileName,
+        cacheFilePath = cachePath+uid+'.jpg',
         srcSize = imageSize(srcFilePath),
-        maxZoom = Math.round(Math.max(Math.sqrt(srcSize.width/TILE_SIZE), Math.sqrt(srcSize.height/TILE_SIZE))-1),
+        maxZoom = MaxZoom(srcSize.width,srcSize.height),
         scale = Math.pow(2,-z),
         centerX = srcSize.width/2,
         centerY = srcSize.height/2,
