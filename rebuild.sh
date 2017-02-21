@@ -9,8 +9,7 @@ RESET="\033[0m"
 
 
 
-# ORIGINS=("a." "b." "c." "")
-ORIGINS=("")
+ORIGINS=("a." "b." "c." "")
 HOSTNAME="origin.atlas.violy.fr"
 
 # récupère la derniere version git
@@ -33,7 +32,11 @@ echo -e "${GREEN}Starting containers...${RESET}"
 for CONTAINER in "${ORIGINS[@]}"
 do
 
+    VIRTUAL_HOST_ENV="--env VIRTUAL_HOST=${CONTAINER}${HOSTNAME}"
+    #
     echo -e "${BLUE}Starting container ${CONTAINER}${HOSTNAME}${GREEN}"
+    echo $VIRTUAL_HOST_ENV;
+    #
     docker run -d \
     --cpus=0.1 \
     --memory="400M" \
@@ -42,7 +45,7 @@ do
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \
     -v $(pwd)/uploads:/opt/node/js/uploads \
-    -env VIRTUAL_HOST=${CONTAINER}${HOSTNAME} \
+    --env VIRTUAL_HOST=${CONTAINER}${HOSTNAME} \
     --hostname ${CONTAINER}${HOSTNAME} \
     --name ${CONTAINER}${HOSTNAME} \
     workshop-cartographie
