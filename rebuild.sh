@@ -41,6 +41,7 @@ do
     -v $(pwd)/images:/opt/node/js/images \
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \
+    -v $(pwd)/uploads:/opt/node/js/uploads \
     --hostname ${CONTAINER}${HOSTNAME} \
     --name ${CONTAINER}${HOSTNAME} \
     workshop-cartographie

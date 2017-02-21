@@ -19,6 +19,7 @@ EXPOSE 80
 
 VOLUME /opt/node/js/images
 VOLUME /opt/node/js/.cache
+VOLUME /opt/node/js/uploads
 
 COPY ./public /opt/node/js/public
 COPY ./index.js /opt/node/js/index.js
