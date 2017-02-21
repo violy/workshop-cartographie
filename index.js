@@ -116,6 +116,20 @@ app.use('/meta/:uid',function(req,res,next){
     });
 })
 
+app.get('/maps',function(req,res){
+   fs.readdir(uploadRoot,function(err,files){
+       var output = '<h1>Liste des cartes</h1><ul>';
+       files.forEach(function(filename){
+           if(filename.length==40 || filename == 'default'){
+               output += '<li><a href="/map/'+filename+'">'+filename+'</a></li>';
+           }
+       });
+       output += '<ul>'
+       res.type('html').end(output);
+
+   })
+});
+
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));
 
 app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
