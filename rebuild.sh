@@ -38,9 +38,8 @@ do
     echo $VIRTUAL_HOST_ENV;
     #
     docker run -d \
-    --cpus=0.1 \
-    --memory="400M" \
-    --memory-reservation="200M" \
+    --cpus=0.2 \
+    --memory="800M" \
     -v $(pwd)/images:/opt/node/js/images \
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \

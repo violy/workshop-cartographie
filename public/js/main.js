@@ -10,7 +10,7 @@ $(document).ready(function(){
         minZoom = -5,
         host = location.host,
         cdnHost = '{s}.cdn.' + host,
-        cdnSubdomains = 'abcdef',
+        cdnSubdomains = 'abc',
         tileTemplate = 'http://' + cdnHost + '/tile/{s}/{z}/{x}/{y}';
 
     function Fail(){
