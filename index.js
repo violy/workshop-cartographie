@@ -80,6 +80,7 @@ app.post('/upload', upload.single('upload'), function(req,res){
                     metaData.minZoom = MaxZoom(metaData.width,metaData.height);
                 console.log(metaData);
                 fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
+                    if(err) throw err;
                     res.json(metaData);
                 })
             });
