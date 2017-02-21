@@ -44,3 +44,16 @@
     opacity: 0;
   }
 }
+.complete{
+  background: #fff;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:auto;
+  width:300px;
+  height:2.5em;
+  padding:2em;
+  display: none;
+}

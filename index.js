@@ -81,6 +81,34 @@ app.post('/upload', upload.single('upload'), function(req,res){
     }
 });
 
+app.use('/map/:uid',function(req,res, next){
+    var uid = req.params.uid;
+    fs.exists(uploadRoot+uid,function(exists){
+        console.log(uploadRoot+uid,exists)
+        if(exists){
+            next();
+        }else{
+            res.status(404).end('carte introuvable...');
+        }
+    });
+}).use('/map/:uid',express.static('public/map.html'));
+
+app.use('/meta/:uid',function(req,res,next){
+    var uid = req.params.uid,
+        filePath = uploadRoot+uid+'/metadata.json';
+    fs.exists(filePath,function(exists){
+        console.log(filePath,exists)
+        if(exists){
+            fs.readFile(filePath,function(err,buffer){
+                res.type('json').end(buffer);
+                next();
+            });
+        }else{
+            res.status(404).end('carte introuvable...');
+        }
+    });
+})
+
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));
 
 app.get('/tile/:n/:z/:x/:y', function (req, res) {

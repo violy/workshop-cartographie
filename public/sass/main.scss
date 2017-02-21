@@ -23,7 +23,12 @@ body{
 }
 
 h1{
-  font-size:2rem;
+  font-size:1.25rem;
+  font-weight: 700;
+  strong{
+    font-size:2rem;
+    text-transform: uppercase;
+  }
 }
 
 #map{

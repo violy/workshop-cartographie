@@ -17,6 +17,8 @@ jQuery(document).ready(function($){
         var data = (formdata !== null) ? formdata : $form.serialize();
         console.log(data);
 
+        $form.fadeOut();
+
         $.ajax({
             url: $form.attr('action'),
             method: $form.attr('method'),
@@ -26,7 +28,8 @@ jQuery(document).ready(function($){
             dataType: 'json', // selon le retour attendu
             data: data
         }).done(function(data){
-            console.log(data);
+            $('#new-map').attr('href','/map/'+data.uid);
+            $('.complete').fadeIn();
         }).fail(function(err){
             console.log(err)
         });
