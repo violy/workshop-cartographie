@@ -42,7 +42,7 @@ do
     -v $(pwd)/.cache:/opt/node/js/.cache \
     -v $(pwd)/public:/opt/node/js/public \
     -v $(pwd)/uploads:/opt/node/js/uploads \
-    -e VIRTUAL_HOST=${CONTAINER}${HOSTNAME} \
+    -env VIRTUAL_HOST=${CONTAINER}${HOSTNAME} \
     --hostname ${CONTAINER}${HOSTNAME} \
     --name ${CONTAINER}${HOSTNAME} \
     workshop-cartographie
