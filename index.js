@@ -191,8 +191,8 @@ app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
                     imgSrc,
                     img = new Image();
 
-                    if (imageOriginSrc != fileName) {
-                        imageOriginSrc = fileName;
+                    if (imageOriginSrc != uid) {
+                        imageOriginSrc = uid;
                         imageOrigin = fs.readFileSync(srcFilePath);
                     }
                     imgSrc = imageOrigin;
