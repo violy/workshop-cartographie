@@ -50,7 +50,7 @@ app.post('/upload', upload.single('upload'), function(req,res){
     console.log(req.file);
     var imageType = false,
         originalname = req.file.originalname,
-        imageUid = sha1(originalname+_SHA_HASH_),
+        imageUid = sha1(originalname+(new Date().getTime())+_SHA_HASH_),
         imageDir = uploadRoot+imageUid+'/';
     switch(req.file.mimetype.toLowerCase()){
         case 'image/jpeg':
