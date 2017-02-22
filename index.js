@@ -125,7 +125,11 @@ app.get('/maps',function(req,res){
            }
        });
        output += '<ul>'
-       res.type('html').end(output);
+       res.type('html')
+           .header( "expire","-1")
+           .header( "Pragma","no-cache")
+           .header( "Cache-control","no-cache")
+           .end(output);
 
    })
 });
