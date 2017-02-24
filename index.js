@@ -59,16 +59,23 @@ app.post('/upload', upload.single('upload'), function(req,res){
         case 'image/png':
             imageType = 'png';
             break;
+        default :
+            res.status(401).json({status:'ERROR',error:'wrong mimetype '+req.file.mimetype});
+            return;
     }
     if(imageType && req.file.buffer.length>0){
         mkdirp(imageDir,function(err){
             if(err) throw err;
             var filePath = imageDir+'layer0.'+imageType,
                 metaPath = imageDir+'metadata.json';
-
+            //
+            mkdirp(imageDir+cacheRoot,function (err) {});
             fs.writeFile(filePath,req.file.buffer,function(err){
                 if(err) throw err;
-                var metaData = imageSize(filePath);
+                var metaData = imageSize(filePath),
+                    width = metaData.width,
+                    height = metaData.height,
+                    minZoom = MaxZoom(width,height);
                     metaData.originalname = originalname;
                     metaData.mimetype = req.file.mimetype;
                     metaData.size = req.file.size;
@@ -77,11 +84,38 @@ app.post('/upload', upload.single('upload'), function(req,res){
                     metaData.title = req.body.title;
                     metaData.dateadd= new Date();
                     metaData.uid = imageUid;
-                    metaData.minZoom = MaxZoom(metaData.width,metaData.height);
-                console.log(metaData);
-                fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
-                    if(err) throw err;
-                    res.json(metaData);
+                    metaData.minZoom = minZoom;
+
+
+                var zoom = 1,
+                    img = new Image();
+                img.src = req.file.buffer;
+
+                function InitScaleLayer(callback){
+                    var scale = Math.pow(2,zoom),
+                        sWidth = width/scale,
+                        sHeight = height/scale,
+                        canvas = new Canvas(sWidth,sHeight),
+                        fileLayerPath = imageDir+'layer'+zoom+'.'+imageType,
+                        ctx = canvas.getContext('2d');
+                    ctx.drawImage(img,0,0,width,height,0,0,sWidth,sHeight);
+                    canvas.toBuffer(function(err,buf){
+                        fs.writeFile(fileLayerPath, buf, function (err) {
+                            if (err) throw err;
+                            console.log("zoom %s -> scale %s done",zoom,scale,fileLayerPath);
+                            if((zoom++) < minZoom){
+                                InitScaleLayer(callback)
+                            }else{
+                                callback();
+                            }
+                        });
+                    });
+                }
+                InitScaleLayer(function(){
+                    fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
+                        if(err) throw err;
+                        res.json(metaData);
+                    });
                 })
             });
         });
@@ -143,51 +177,61 @@ app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
         z = parseFloat(req.params.z),
         uid = req.params.uid;
 
-    var fileName = 'layer0.jpg',
-        srcPath = uploadRoot+uid+'/',
+    var basePath = uploadRoot+uid+'/',
+        meta = require('./'+basePath+'metadata.json'),
+        nZ = -z, // negative zoom
+        minZoom = meta.minZoom,
+        nZmin = Math.min(nZ,minZoom),
+        nZScale = Math.pow(2,nZmin),
+        nZDiffScale = Math.pow(2,nZmin-nZ),
+        fileName = 'layer'+nZmin+'.jpg',
+        srcPath = basePath,
         srcFilePath = srcPath+fileName,
-        cachePath = cacheRoot + z + '/' + x + '/' + y + '/',
+        cachePath = basePath+cacheRoot + z + '/' + x + '/' + y + '/',
         cacheFilePath = cachePath+uid+'.jpg',
         srcSize = imageSize(srcFilePath),
         maxZoom = MaxZoom(srcSize.width,srcSize.height),
-        scale = Math.pow(2,-z),
-        centerX = srcSize.width/2,
-        centerY = srcSize.height/2,
-        scaledTile = scale * TILE_SIZE,
+        scale = Math.pow(2,nZ),
+        layerWidth = Math.round(meta.width/nZScale),
+        layerHeight = Math.round(meta.height/nZScale),
+        centerX = Math.round(layerWidth/2),
+        centerY = Math.round(layerHeight/2),
+        scaledTile =  TILE_SIZE/nZDiffScale,
         offsetX = (x) * scaledTile + centerX,
         offsetY = (y) * scaledTile + centerY,
-        contain = offsetX > -scaledTile && offsetX<srcSize.width && offsetY > -scaledTile && offsetY<srcSize.height,
-        border = contain && (offsetX < 0 || offsetX > srcSize.width || offsetY < 0 || offsetY > srcSize.height);
+        contain = offsetX > -scaledTile && offsetX<layerWidth && offsetY > -scaledTile && offsetY<layerHeight,
+        border = contain && (offsetX < 0 || offsetX > layerWidth-scaledTile || offsetY < 0 || offsetY > layerHeight-scaledTile);
 
-    console.log(offsetX,offsetY,srcSize,scaledTile);
-    console.log(offsetX > -scaledTile , offsetX<srcSize.width , offsetY > -scaledTile , offsetY<srcSize.height);
-    console.log("contain %s, border %s",contain,border);
 
     function EndImage(canvas,filePath,dirPath){
-        canvas.toBuffer(function (err, buf) {
+        console.log('dirPath',dirPath)
+        mkdirp(dirPath, function (err) {
             if (err) throw err;
-            res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buf.length
-            });
-            if(buf.length == 0){return res.status(500).end()};
-            res.end(buf);
-            // écrit le fichier en local
-            mkdirp(dirPath, function (err) {
+            canvas.toBuffer(function (err, buf) {
                 if (err) throw err;
+                res.writeHead(200, {
+                    'Content-Type': 'image/png',
+                    'Content-Length': buf.length
+                });
+                if (buf.length == 0) {
+                    return res.status(500).end()
+                }
+                ;
+                res.end(buf);
+                // écrit le fichier en local
                 fs.writeFile(filePath, buf, function (err) {
                     if (err) throw err;
                     console.log('Done. %s', filePath);
                 });
-            })
+            });
         });
+
 
     }
 
     if(contain) {
         res.sendFile(cacheFilePath, {maxAge: '1d', root: __dirname}, function (err) {
             if (err) {
-                //console.log('cache not exists', cacheFilePath);
                 try {
 
                     var canvas = new Canvas(TILE_SIZE, TILE_SIZE),
@@ -195,8 +239,8 @@ app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
                     imgSrc,
                     img = new Image();
 
-                    if (imageOriginSrc != uid) {
-                        imageOriginSrc = uid;
+                    if (imageOriginSrc != srcFilePath) {
+                        imageOriginSrc = srcFilePath;
                         imageOrigin = fs.readFileSync(srcFilePath);
                     }
                     imgSrc = imageOrigin;
@@ -207,10 +251,10 @@ app.get('/tile/:n/:z/:x/:y/:uid', function (req, res) {
                     //console.log('Tile ', fileName, img.width, img.height);
                     // now, lets draw the tile
 
-                        ctx.drawImage(img, offsetX, offsetY, TILE_SIZE * scale, TILE_SIZE * scale, 0, 0, TILE_SIZE, TILE_SIZE);
-                        // and transform it into a binary buffer, so we can
-                        // deliver it to the client
-                        EndImage(canvas, cacheFilePath, cachePath);
+                    ctx.drawImage(img, offsetX, offsetY, scaledTile, scaledTile, 0, 0, TILE_SIZE, TILE_SIZE);
+                    // and transform it into a binary buffer, so we can
+                    // deliver it to the client
+                    EndImage(canvas, cacheFilePath, cachePath);
                 }catch(err){
                     console.log(err);
                     res.status(500).end();
