@@ -58,14 +58,14 @@ table {
   border-spacing: 0;
 }
 
-/* line 7, ../sass/main.scss */
+/* line 8, ../sass/main.scss */
 body {
   font-family: "Space Mono", monospace;
   font-size: 16px;
   color: #303030;
 }
 
-/* line 13, ../sass/main.scss */
+/* line 14, ../sass/main.scss */
 .page {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -76,23 +76,23 @@ body {
   min-height: calc(100vh - 20px * 2);
   position: relative;
 }
-/* line 19, ../sass/main.scss */
+/* line 20, ../sass/main.scss */
 .page header {
   padding: 20px;
 }
 
-/* line 25, ../sass/main.scss */
+/* line 26, ../sass/main.scss */
 h1 {
   font-size: 1.25rem;
   font-weight: 700;
 }
-/* line 28, ../sass/main.scss */
+/* line 29, ../sass/main.scss */
 h1 strong {
   font-size: 2rem;
   text-transform: uppercase;
 }
 
-/* line 34, ../sass/main.scss */
+/* line 35, ../sass/main.scss */
 #map {
   display: block;
   width: 100%;
@@ -154,7 +154,7 @@ h1 strong {
 }
 
 /* line 47, ../sass/_new.scss */
-.complete {
+.complete, .waiting {
   background: #fff;
   position: absolute;
   top: 0;
@@ -166,4 +166,9 @@ h1 strong {
   height: 2.5em;
   padding: 2em;
   display: none;
+}
+
+/* line 60, ../sass/_new.scss */
+progress[value] {
+  width: 100%;
 }

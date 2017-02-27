@@ -46,8 +46,11 @@ app.use(express.static('public'));
 app.use('/new',express.static('public/new.html'));
 
 app.post('/upload', upload.single('upload'), function(req,res){
-    console.log(req.body);
-    console.log(req.file);
+
+    if(!req.file){
+        return res.status(401).json({error:'please select a file'});
+    }
+
     var imageType = false,
         originalname = req.file.originalname,
         imageUid = sha1(originalname+(new Date().getTime())+_SHA_HASH_),
@@ -85,41 +88,62 @@ app.post('/upload', upload.single('upload'), function(req,res){
                     metaData.dateadd= new Date();
                     metaData.uid = imageUid;
                     metaData.minZoom = minZoom;
+                console.log('image uploaded',imageUid)
 
-
-                var zoom = 1,
-                    img = new Image();
-                img.src = req.file.buffer;
-
-                function InitScaleLayer(callback){
-                    var scale = Math.pow(2,zoom),
-                        sWidth = width/scale,
-                        sHeight = height/scale,
-                        canvas = new Canvas(sWidth,sHeight),
-                        fileLayerPath = imageDir+'layer'+zoom+'.'+imageType,
-                        ctx = canvas.getContext('2d');
-                    ctx.drawImage(img,0,0,width,height,0,0,sWidth,sHeight);
-                    canvas.toBuffer(function(err,buf){
-                        fs.writeFile(fileLayerPath, buf, function (err) {
-                            if (err) throw err;
-                            console.log("zoom %s -> scale %s done",zoom,scale,fileLayerPath);
-                            if((zoom++) < minZoom){
-                                InitScaleLayer(callback)
-                            }else{
-                                callback();
-                            }
-                        });
-                    });
-                }
-                InitScaleLayer(function(){
-                    fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
-                        if(err) throw err;
-                        res.json(metaData);
-                    });
-                })
+                fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
+                    if(err) throw err;
+                    console.log('metadata ok',imageUid)
+                    res.json(metaData);
+                });
             });
         });
     }
+});
+
+app.post('/build-zoom/:uid',function(req,res){
+    var imageUid = req.params.uid,
+        imageDir = uploadRoot+imageUid+'/',
+        metaPath = imageDir+'metadata.json',
+        metaData = JSON.parse(fs.readFileSync(metaPath)),
+        imageType = metaData.type,
+        width = metaData.width,
+        height = metaData.height,
+        filePath = imageDir+'layer0.'+imageType,
+        img = new Image();
+
+    fs.readFile(filePath,function(err,buf){
+        img.src = buf;
+        console.log('readFile',filePath);
+        var zoom = 1;
+        function BuildZoom(callback){
+            var fileLayerPath = imageDir+'layer'+zoom+'.'+imageType,
+                scale = Math.pow(2,zoom),
+                sWidth = width/scale,
+                sHeight = height/scale,
+                canvas = new Canvas(sWidth,sHeight),
+                ctx = canvas.getContext('2d');
+
+                ctx.drawImage(img,0,0,width,height,0,0,sWidth,sHeight);
+            canvas.toBuffer(function(err,buf){
+                fs.writeFile(fileLayerPath, buf, function (err) {
+                    if (err) throw err;
+                    console.log("zoom %s -> scale %s done",zoom,scale,fileLayerPath);
+                    if(zoom>metaData.minZoom){
+                        callback();
+                    }else{
+                        zoom++;
+                        BuildZoom(callback);
+                    }
+                });
+            });
+        }
+        BuildZoom(function(){
+            console.log('Zoom builded');
+            res.json({status:'OK'});
+        });
+
+    })
+
 });
 
 app.use('/map/:uid',function(req,res, next){
