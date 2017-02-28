@@ -115,8 +115,25 @@ h1 strong {
   font-size: 2rem;
   text-transform: uppercase;
 }
+@media screen and (max-width: 640px) {
+  /* line 28, ../sass/main.scss */
+  h1 {
+    font-size: .75rem;
+  }
+  /* line 37, ../sass/main.scss */
+  h1 strong {
+    font-size: 1rem;
+  }
+}
 
-/* line 37, ../sass/main.scss */
+@media screen and (max-width: 640px) {
+  /* line 42, ../sass/main.scss */
+  h2 {
+    font-size: .5rem;
+  }
+}
+
+/* line 48, ../sass/main.scss */
 #map {
   display: block;
   width: 100%;
@@ -126,14 +143,22 @@ h1 strong {
 }
 
 /* line 2, ../sass/_new.scss */
+.new fieldset {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 8, ../sass/_new.scss */
 .upload label {
   display: none;
 }
-/* line 4, ../sass/_new.scss */
+/* line 10, ../sass/_new.scss */
 .upload label.current {
   display: block;
 }
-/* line 8, ../sass/_new.scss */
+/* line 14, ../sass/_new.scss */
 .upload input {
   display: block;
   width: 100%;
@@ -143,11 +168,11 @@ h1 strong {
   background: #fff;
   outline: none;
 }
-/* line 16, ../sass/_new.scss */
+/* line 22, ../sass/_new.scss */
 .upload input[type=submit] {
   background: #F1F1F1;
 }
-/* line 20, ../sass/_new.scss */
+/* line 26, ../sass/_new.scss */
 .upload.initial {
   background: #fff;
   position: absolute;
@@ -157,17 +182,17 @@ h1 strong {
   bottom: 0;
   margin: auto;
   width: 300px;
-  height: 4.5em;
+  height: 8.5em;
   padding: 2em;
 }
-/* line 32, ../sass/_new.scss */
+/* line 38, ../sass/_new.scss */
 .upload small {
   font-size: .75em;
   display: inline-block;
   line-height: 1.25em;
   margin: .25em 0 .5em;
 }
-/* line 38, ../sass/_new.scss */
+/* line 44, ../sass/_new.scss */
 .upload input[type=file] {
   position: absolute;
   width: 100%;
@@ -177,7 +202,7 @@ h1 strong {
   opacity: 0;
 }
 
-/* line 47, ../sass/_new.scss */
+/* line 53, ../sass/_new.scss */
 .complete, .waiting {
   background: #fff;
   position: absolute;
@@ -192,7 +217,7 @@ h1 strong {
   display: none;
 }
 
-/* line 60, ../sass/_new.scss */
+/* line 66, ../sass/_new.scss */
 progress[value] {
   width: 100%;
 }

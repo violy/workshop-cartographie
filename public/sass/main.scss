@@ -32,6 +32,17 @@ h1{
     font-size:2rem;
     text-transform: uppercase;
   }
+  @media screen and (max-width:640px){
+    font-size:.75rem;
+    strong{
+      font-size:1rem;
+    }
+  }
+}
+h2{
+  @media screen and (max-width:640px){
+    font-size:.5rem;
+  }
 }
 
 #map{

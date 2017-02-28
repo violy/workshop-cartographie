@@ -1,3 +1,9 @@
+.new{
+  fieldset{
+    max-width: 100%;
+    @include box-sizing(border-box);
+  }
+}
 .upload{
   label{
     display: none;
@@ -26,7 +32,7 @@
     bottom:0;
     margin:auto;
     width:300px;
-    height:4.5em;
+    height:8.5em;
     padding:2em;
   }
   small{
