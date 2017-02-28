@@ -1,4 +1,6 @@
 jQuery(document).ready(function($){
+
+    var meta,uid;
     $('#new-form').submit(function(e){
         e.preventDefault();
         e.stopPropagation();
@@ -29,14 +31,13 @@ jQuery(document).ready(function($){
             dataType: 'json', // selon le retour attendu
             data: data
         }).done(function(data){
-            $('#new-map').attr('href','/map/'+data.uid);
+            meta = data;
+            uid = meta.uid;
+            $('#new-map').attr('href','/map/'+uid);
             $('#build-progress').val(10);
-            //setTimeout(function(){
-                BuildZoom(data.uid);
-                //}
-               // ,1000);
+            setTimeout(BuildZoom,100)
+
         }).fail(function(err){
-            console.log()
             alert(err.responseJSON.error);
             $form.fadeIn();
             $('.waiting').hide();
@@ -44,27 +45,35 @@ jQuery(document).ready(function($){
 
     });
     // fabrique un calque
-    function BuildZoom(uid){
+    function BuildZoom(){
         $.ajax({
             method:'POST',
             dataType: 'json', // selon le retour attendu
             url:'build-zoom/'+uid,
         }).done(function(data){
             $('#build-progress').val(50);
-            BuildCache(uid,0);
+            BuildCache(0);
         }).fail(function(err){
             console.log(err);
         });
     }
     // fabrique un cache
-    function BuildCache(uid,level){
+    function BuildCache(level){
+
+
+        if(level>=meta.minZoom){
+            $('.waiting').fadeOut();
+            $('.complete').fadeIn();
+            return;
+        }
+
+
         $.ajax({
-            method:'POST',
             dataType: 'json', // selon le retour attendu
             url:'build-cache/'+uid+'/'+level,
         }).done(function(data){
-            $('#build-progress').val(60);
-            BuildCache(uid);
+            $('#build-progress').val(60+40*level/meta.minZoom);
+            BuildCache(level+1);
         }).fail(function(err){
             console.log(err);
         });

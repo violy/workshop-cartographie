@@ -93,7 +93,7 @@ app.post('/upload', upload.single('upload'), function(req,res){
                 fs.writeFile(metaPath,JSON.stringify(metaData),function(err){
                     if(err) throw err;
                     console.log('metadata ok',imageUid)
-                    res.json(metaData);
+                    res.json(metaData).end();
                 });
             });
         });
@@ -137,13 +137,95 @@ app.post('/build-zoom/:uid',function(req,res){
                 });
             });
         }
-        BuildZoom(function(){
+
+        function BuildThumbnail(callback){
+            var thumbFilePath = imageDir+'thumb.'+imageType,
+                scale = Math.max(width/TILE_SIZE,height/TILE_SIZE),
+                sWidth = width/scale,
+                sHeight = height/scale,
+                canvas = new Canvas(TILE_SIZE,TILE_SIZE),
+                ctx = canvas.getContext('2d'),
+                offsetX = (TILE_SIZE-sWidth)/2,
+                offsetY = (TILE_SIZE-sHeight)/2,
+                out,stream;
+
+            ctx.drawImage(img,0,0,width,height,offsetX,offsetY,sWidth,sHeight);
+            out = fs.createWriteStream(thumbFilePath);
+            stream = canvas.pngStream();
+            stream.on('data',function(chunk){
+                out.write(chunk);
+            });
+            stream.on('end', function(){
+                callback();
+            });
+        }
+
+        BuildZoom(function(){BuildThumbnail(function(){
             console.log('Zoom builded');
             res.json({status:'OK'});
-        });
+        })});
 
     })
 
+});
+
+app.get('/build-cache/:uid/:zoom',function(req,res){
+   var imageUid = req.params.uid,
+       zoom = parseInt(req.params.zoom),
+       scale = Math.pow(2,zoom),
+       imageDir = uploadRoot+imageUid+'/',
+       metaPath = imageDir+'metadata.json',
+       metaData = JSON.parse(fs.readFileSync(metaPath)),
+       imageType = metaData.type,
+       width = metaData.width,
+       height = metaData.height,
+       filePath = imageDir+'layer'+zoom+'.'+imageType,
+       xMaxAbs = Math.ceil(width/scale/TILE_SIZE/2),
+       yMaxAbs = Math.ceil(height/scale/TILE_SIZE/2),
+       img = new Image();
+
+    fs.readFile(filePath,function(err,buf) {
+        img.src = buf;
+        console.log('readFile', filePath);
+        var x = -xMaxAbs;
+        var y = -yMaxAbs,
+            offsetX = width/scale/2,
+            offsetY = height/scale/2;
+        function DrawNextTile(callback){
+            var z = -zoom,
+                canvas = new Canvas(TILE_SIZE,TILE_SIZE),
+                ctx = canvas.getContext('2d'),
+                cacheDirPath = imageDir+cacheRoot+z+'/'+x+'/'+y+'/',
+                cacheFilePath = cacheDirPath+imageUid+'.'+imageType,
+                stream, out;
+            mkdirp(cacheDirPath,function(err){
+                console.log('x %s y %s',x,y);
+                ctx.clearRect(0,0,TILE_SIZE,TILE_SIZE);
+                ctx.drawImage(img,offsetX+x*TILE_SIZE,offsetY+y*TILE_SIZE,TILE_SIZE,TILE_SIZE,0,0,TILE_SIZE,TILE_SIZE);
+                out = fs.createWriteStream(cacheFilePath);
+                stream = canvas.pngStream();
+                stream.on('data',function(chunk){
+                    out.write(chunk);
+                });
+                stream.on('end', function(){
+                    console.log('saved png',x,y);
+                });
+                if(x<xMaxAbs){
+                    x++;
+                }else if(y<yMaxAbs){
+                    x = -xMaxAbs;
+                    y++;
+                }else{
+                    return callback();
+                }
+                DrawNextTile(callback);
+            })
+
+        }
+        DrawNextTile(function(){
+            res.json({xMaxAbs:xMaxAbs,yMaxAbs:yMaxAbs,scale:scale}).end();
+        });
+    });
 });
 
 app.use('/map/:uid',function(req,res, next){
