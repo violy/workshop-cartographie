@@ -14,6 +14,10 @@ var express = require('express'),
 var fs = require('fs'),
     mkdirp = require('mkdirp');
 
+var handlebars = require('handlebars'),
+    templateHTML = fs.readFileSync('public/template.html','utf-8'),
+    template = handlebars.compile(templateHTML);
+
 var sha1 = require('sha1');
 
 var imageSize = require('image-size');
@@ -44,6 +48,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 app.use(express.static('public'));
 app.use('/new',express.static('public/new.html'));
+app.use('/thumbs',express.static('uploads'));
 
 app.post('/upload', upload.single('upload'), function(req,res){
 
@@ -258,10 +263,10 @@ app.use('/meta/:uid',function(req,res,next){
 
 app.get('/maps',function(req,res){
    fs.readdir(uploadRoot,function(err,files){
-       var output = '<h1>Liste des cartes</h1><ul>';
+       var output = '<h1>Liste des cartes</h1><ul class="map-list">';
        files.forEach(function(filename){
            if(filename.length==40 || filename == 'default'){
-               output += '<li><a href="/map/'+filename+'">'+filename+'</a></li>';
+               output += '<li><a href="/map/'+filename+'"><img src="thumbs/'+filename+'/thumb.jpg" alt="'+filename+'"></a></li>';
            }
        });
        output += '<ul>'
@@ -269,7 +274,7 @@ app.get('/maps',function(req,res){
            .header( "expire","-1")
            .header( "Pragma","no-cache")
            .header( "Cache-control","no-cache")
-           .end(output);
+           .end(template({content:output}));
 
    })
 });

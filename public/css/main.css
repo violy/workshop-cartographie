@@ -58,14 +58,38 @@ table {
   border-spacing: 0;
 }
 
-/* line 8, ../sass/main.scss */
+/* line 1, ../sass/_template.scss */
+#content {
+  background: #f0f0f0;
+  padding: 20px;
+}
+
+/* line 6, ../sass/_template.scss */
+.map-list {
+  overflow: hidden;
+  *zoom: 1;
+  padding: 20px 0 0;
+}
+/* line 9, ../sass/_template.scss */
+.map-list li {
+  float: left;
+  background: #ddd;
+  margin: 0 5px 0 0;
+}
+/* line 14, ../sass/_template.scss */
+.map-list img {
+  width: 128px;
+  height: 128px;
+}
+
+/* line 10, ../sass/main.scss */
 body {
   font-family: "Space Mono", monospace;
   font-size: 16px;
   color: #303030;
 }
 
-/* line 14, ../sass/main.scss */
+/* line 16, ../sass/main.scss */
 .page {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -76,23 +100,23 @@ body {
   min-height: calc(100vh - 20px * 2);
   position: relative;
 }
-/* line 20, ../sass/main.scss */
+/* line 22, ../sass/main.scss */
 .page header {
   padding: 20px;
 }
 
-/* line 26, ../sass/main.scss */
+/* line 28, ../sass/main.scss */
 h1 {
   font-size: 1.25rem;
   font-weight: 700;
 }
-/* line 29, ../sass/main.scss */
+/* line 31, ../sass/main.scss */
 h1 strong {
   font-size: 2rem;
   text-transform: uppercase;
 }
 
-/* line 35, ../sass/main.scss */
+/* line 37, ../sass/main.scss */
 #map {
   display: block;
   width: 100%;

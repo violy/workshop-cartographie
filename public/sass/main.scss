@@ -1,7 +1,9 @@
 @import "compass/css3/box-sizing";
 @import "compass/css3/appearance";
+@import "compass/utilities/general/clearfix";
 @import "../vendors/reset";
 @import "variables";
+@import "template";
 
 @import url("https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i&subset=latin-ext");
 

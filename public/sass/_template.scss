@@ -1,0 +1,18 @@
+#content{
+  background: #f0f0f0;
+  padding: 20px;
+}
+
+.map-list{
+  @include clearfix();
+  padding: 20px 0 0;
+  li{
+    float: left;
+    background: #ddd;
+    margin: 0 5px 0 0;
+  }
+  img{
+    width:128px;
+    height:128px;
+  }
+}
