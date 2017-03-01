@@ -10,7 +10,7 @@ jQuery(document).ready(function($){
            url:'build-cache/'+uid+'/'+zoom
        }).done(function(a,b,c){
            $el.removeAttr('disabled');
-           $el.attr('data-duration',(new Date().getTime()-t0)/1000);
+           $el.attr('data-duration',Math.round(10*(new Date().getTime()-t0))/10000);
        });
    });
 });

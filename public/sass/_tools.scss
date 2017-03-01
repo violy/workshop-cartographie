@@ -23,7 +23,7 @@
     clear: both;
     &[data-duration]{
       &:after{
-        content:' (' attr(data-duration) ' sec)';
+        content:' (' attr(data-duration) '\00a0sec)';
         color:#ff6996;
       }
     }
