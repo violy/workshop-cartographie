@@ -1,0 +1,24 @@
+<div class="tools" data-uid="{{uid}}">
+    <a href="/map/{{uid}}" target="_blank"><img class="thumb" src="thumbs/{{uid}}/thumb.{{type}}" /></a>
+    <fieldset class="infos">
+        <label>UID : <em>{{uid}}</em></label>
+        <label>largeur : <em>{{width}}px</em></label>
+        <label>hauteur : <em>{{height}}px</em></label>
+        <label>poids &nbsp;&nbsp;: <em>{{#filesize size}}{{/filesize}}</em></label>
+    </fieldset>
+    <fieldset>
+        <h4>Niveau de zoom</h4>
+        {{#times maxZoom this}}
+            <div class="zoom-level">
+                <div class="col layer-preview">
+                    <a href="thumbs/{{uid}}/layer{{index}}.{{type}}" target="_blank"><img src="thumbs/{{uid}}/layer{{index}}.{{type}}" class="layer" title="layer {{index}}"/> Layer {{index}}</a>
+                </div>
+                <div class="col">
+                    <button class="build-cache" data-zoom="{{index}}">régéner le cache du Zoom {{index}}</button>
+                </div>
+                <div class="col"></div>
+            </div>
+        {{/times}}
+    </fieldset>
+
+</div>

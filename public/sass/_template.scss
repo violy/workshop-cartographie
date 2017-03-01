@@ -4,15 +4,47 @@
 }
 
 .map-list{
-  @include clearfix();
+  &:after{
+    content:' ';
+    display: block;
+    clear: both;
+  }
   padding: 20px 0 0;
+  .tools{
+    position: absolute;
+    top:0;
+    right:0;
+    height:2em;
+    line-height: 2em;
+    padding: 0 .5em;
+    color:#000;
+    background: #eee;
+    text-decoration: none;
+    opacity: 0;
+    @include transition(.2s);
+    &:hover{
+      background: #fff;
+      color:#666;
+    }
+  }
   li{
     float: left;
-    background: #ddd;
-    margin: 0 5px 0 0;
+    background: #fff;
+    margin: 0 20px 20px 0;
+    position: relative;
+    @include box-shadow(transparentize(#000,.8) 0 0 20px );
+    @include transition(.2s);
+    &:hover{
+      @include scale(1.2);
+      .tools{
+        opacity: 1;
+      }
+    }
   }
+
   img{
     width:128px;
     height:128px;
+    display: block;
   }
 }

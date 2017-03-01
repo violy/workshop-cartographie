@@ -6,6 +6,8 @@ var TILE_SIZE = config.TILE_SIZE,
     sourceFile = config.sourceFile,
     _SHA_HASH_ = config.SHA_HASH;
 
+var _ = require('underscore');
+
 var express = require('express'),
     bodyParser = require('body-parser'),
     multer = require('multer'),
@@ -15,8 +17,42 @@ var fs = require('fs'),
     mkdirp = require('mkdirp');
 
 var handlebars = require('handlebars'),
-    templateHTML = fs.readFileSync('public/template.html','utf-8'),
-    template = handlebars.compile(templateHTML);
+    layout = handlebars.compile(fs.readFileSync('public/layout.hbs','utf-8')),
+    layoutDefaultOptions = {
+        title:'Arthur Violy - 2017 - Académie Charpentier',
+        content:'...',
+        js:['main']
+    };
+
+handlebars.registerHelper('times', function(n, context, block) {
+    var accum = '';
+    for(var i = 0; i < n; ++i)
+        accum += block.fn(_(context).extend({index:i}));
+    return accum;
+});
+
+handlebars.registerHelper('filesize', function(bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Bytes';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return (bytes / Math.pow(1024, i)).toFixed(2) + sizes[i];
+});
+handlebars.registerHelper("zoomScale", function(zoom,block) {
+    console.log(this);
+    return block.fn(Math.pow(2,zoom));
+});
+handlebars.registerHelper("math", function(lvalue, operator, rvalue) {
+    lvalue = parseFloat(lvalue);
+    rvalue = parseFloat(rvalue);
+
+    return {
+        "+": lvalue + rvalue,
+        "-": lvalue - rvalue,
+        "*": lvalue * rvalue,
+        "/": lvalue / rvalue,
+        "%": lvalue % rvalue
+    }[operator];
+});
 
 var sha1 = require('sha1');
 
@@ -261,12 +297,35 @@ app.use('/meta/:uid',function(req,res,next){
     });
 })
 
+app.use('/tools/:uid',function(req,res,next){
+    var uid = req.params.uid,
+        filePath = uploadRoot+uid+'/metadata.json';
+    fs.exists(filePath,function(exists){
+        console.log(filePath,exists)
+        if(exists){
+            fs.readFile(filePath,function(err,buffer){
+                var meta = JSON.parse(buffer),
+                    toolsTemplate = handlebars.compile(fs.readFileSync('public/tools.hbs','utf-8'));
+
+                meta.maxZoom = meta.minZoom + 2;
+
+                var content = toolsTemplate(meta);
+
+                res.end(layout(_.extend(layoutDefaultOptions,{js:['tools'],title:'édition de la carte '+meta.title+' - '+meta.author,content:content})));
+                next();
+            });
+        }else{
+            res.status(404).end('carte introuvable...');
+        }
+    });
+})
+
 app.get('/maps',function(req,res){
    fs.readdir(uploadRoot,function(err,files){
        var output = '<h1>Liste des cartes</h1><ul class="map-list">';
        files.forEach(function(filename){
            if(filename.length==40 || filename == 'default'){
-               output += '<li><a href="/map/'+filename+'"><img src="thumbs/'+filename+'/thumb.jpg" alt="'+filename+'"></a></li>';
+               output += '<li class="item" data-uid="'+filename+'"><a href="/map/'+filename+'"><img src="thumbs/'+filename+'/thumb.jpg" alt="'+filename+'"></a><a href="tools/'+filename+'" class="tools">Editer</a></li>';
            }
        });
        output += '<ul>'
@@ -274,7 +333,7 @@ app.get('/maps',function(req,res){
            .header( "expire","-1")
            .header( "Pragma","no-cache")
            .header( "Cache-control","no-cache")
-           .end(template({content:output}));
+           .end(layout(_.extend(layoutDefaultOptions,{title:'liste des cartes',content:output,js:[]})));
 
    })
 });

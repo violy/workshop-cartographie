@@ -2,23 +2,24 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Workshop Cartographie - Arthur Violy - 2017 - Académie Charpentier</title>
+    <title>ATLAS - {{title}}</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <base href="/">
     <link rel="stylesheet" href="vendors/leaflet/leaflet.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="vendors/jquery.min.js"></script>
     <script src="vendors/leaflet/leaflet.js"></script>
-    <script src="js/main.js"></script>
+    {{#each js}}
+        <script src="js/{{this}}.js"></script>
+    {{/each}}
 </head>
 <body>
 <div class="page">
     <header>
-        <h1><strong>Atlas</strong> collection de cartograhies</h1>
-        <h2>Arthur Violy - 2017 - Académie Charpentier</h2>
+        <h1><strong>Atlas</strong> collection de cartographies</h1>
+        <h2>{{title}}</h2>
     </header>
-    <figure id="content">{{{content}}}</figure>
+    <div class="figure" id="content">{{{content}}}</div>
 </div>
-
 </body>
 </html>

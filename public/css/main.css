@@ -66,30 +66,155 @@ table {
 
 /* line 6, ../sass/_template.scss */
 .map-list {
-  overflow: hidden;
-  *zoom: 1;
   padding: 20px 0 0;
 }
-/* line 9, ../sass/_template.scss */
+/* line 7, ../sass/_template.scss */
+.map-list:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+/* line 13, ../sass/_template.scss */
+.map-list .tools {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2em;
+  line-height: 2em;
+  padding: 0 .5em;
+  color: #000;
+  background: #eee;
+  text-decoration: none;
+  opacity: 0;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+/* line 25, ../sass/_template.scss */
+.map-list .tools:hover {
+  background: #fff;
+  color: #666;
+}
+/* line 30, ../sass/_template.scss */
 .map-list li {
   float: left;
-  background: #ddd;
-  margin: 0 5px 0 0;
+  background: #fff;
+  margin: 0 20px 20px 0;
+  position: relative;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
-/* line 14, ../sass/_template.scss */
+/* line 37, ../sass/_template.scss */
+.map-list li:hover {
+  -moz-transform: scale(1.2, 1.2);
+  -ms-transform: scale(1.2, 1.2);
+  -webkit-transform: scale(1.2, 1.2);
+  transform: scale(1.2, 1.2);
+}
+/* line 39, ../sass/_template.scss */
+.map-list li:hover .tools {
+  opacity: 1;
+}
+/* line 45, ../sass/_template.scss */
 .map-list img {
   width: 128px;
   height: 128px;
+  display: block;
 }
 
-/* line 10, ../sass/main.scss */
+/* line 2, ../sass/_tools.scss */
+.tools a {
+  text-decoration: none;
+  color: inherit;
+}
+/* line 7, ../sass/_tools.scss */
+.tools .infos label {
+  float: left;
+  clear: both;
+}
+/* line 11, ../sass/_tools.scss */
+.tools .infos em {
+  color: #ff6996;
+}
+/* line 15, ../sass/_tools.scss */
+.tools h4 {
+  padding: 1em 0;
+}
+/* line 18, ../sass/_tools.scss */
+.tools .thumb {
+  background: #fff;
+}
+/* line 21, ../sass/_tools.scss */
+.tools .build-cache {
+  float: left;
+  clear: both;
+}
+/* line 25, ../sass/_tools.scss */
+.tools .build-cache[data-duration]:after {
+  content: " (" attr(data-duration) " sec)";
+  color: #ff6996;
+}
+/* line 31, ../sass/_tools.scss */
+.tools .zoom-level {
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  border-bottom: solid 1px #999;
+}
+/* line 32, ../sass/_tools.scss */
+.tools .zoom-level .col {
+  width: 33.33%;
+  float: left;
+}
+/* line 39, ../sass/_tools.scss */
+.tools .zoom-level:after {
+  content: ' ';
+  clear: both;
+  display: block;
+}
+/* line 45, ../sass/_tools.scss */
+.tools img.layer {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  vertical-align: top;
+}
+/* line 53, ../sass/_tools.scss */
+.tools .layer-preview {
+  text-align: top;
+}
+/* line 56, ../sass/_tools.scss */
+.tools button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  padding: 20px;
+  border: none;
+  background: #fff;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  margin: 0 1em 1em 0;
+}
+/* line 63, ../sass/_tools.scss */
+.tools button:disabled {
+  background: #eee;
+}
+
+/* line 14, ../sass/main.scss */
 body {
   font-family: "Space Mono", monospace;
   font-size: 16px;
   color: #303030;
 }
 
-/* line 16, ../sass/main.scss */
+/* line 20, ../sass/main.scss */
 .page {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -100,40 +225,40 @@ body {
   min-height: calc(100vh - 20px * 2);
   position: relative;
 }
-/* line 22, ../sass/main.scss */
+/* line 26, ../sass/main.scss */
 .page header {
   padding: 20px;
 }
 
-/* line 28, ../sass/main.scss */
+/* line 32, ../sass/main.scss */
 h1 {
   font-size: 1.25rem;
   font-weight: 700;
 }
-/* line 31, ../sass/main.scss */
+/* line 35, ../sass/main.scss */
 h1 strong {
   font-size: 2rem;
   text-transform: uppercase;
 }
 @media screen and (max-width: 640px) {
-  /* line 28, ../sass/main.scss */
+  /* line 32, ../sass/main.scss */
   h1 {
     font-size: .75rem;
   }
-  /* line 37, ../sass/main.scss */
+  /* line 41, ../sass/main.scss */
   h1 strong {
     font-size: 1rem;
   }
 }
 
 @media screen and (max-width: 640px) {
-  /* line 42, ../sass/main.scss */
+  /* line 46, ../sass/main.scss */
   h2 {
     font-size: .5rem;
   }
 }
 
-/* line 48, ../sass/main.scss */
+/* line 52, ../sass/main.scss */
 #map {
   display: block;
   width: 100%;
