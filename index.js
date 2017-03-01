@@ -210,7 +210,7 @@ app.post('/build-zoom/:uid',function(req,res){
 
 });
 
-app.get('/build-cache/:uid/:zoom',function(req,res){
+app.post('/build-cache/:uid/:zoom',function(req,res){
    var imageUid = req.params.uid,
        zoom = parseInt(req.params.zoom),
        scale = Math.pow(2,zoom),

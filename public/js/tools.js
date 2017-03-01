@@ -6,6 +6,7 @@ jQuery(document).ready(function($){
            t0 = new Date().getTime();
        $el.attr('disabled',true);
        $.ajax({
+           method:'POST',
            url:'build-cache/'+uid+'/'+zoom
        }).done(function(a,b,c){
            $el.removeAttr('disabled');

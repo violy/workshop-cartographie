@@ -70,6 +70,7 @@ jQuery(document).ready(function($){
 
         $.ajax({
             dataType: 'json', // selon le retour attendu
+            method:'POST',
             url:'build-cache/'+uid+'/'+level,
         }).done(function(data){
             $('#build-progress').val(60+40*level/meta.minZoom);
