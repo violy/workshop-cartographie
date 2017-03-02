@@ -21,6 +21,7 @@ var handlebars = require('handlebars'),
     layoutDefaultOptions = {
         title:'Arthur Violy - 2017 - Académie Charpentier',
         content:'...',
+        classes:[],
         js:['main']
     };
 
@@ -325,7 +326,8 @@ app.get('/maps',function(req,res){
        var output = '<h1>Liste des cartes</h1><ul class="map-list">';
        files.forEach(function(filename){
            if(filename.length==40 || filename == 'default'){
-               output += '<li class="item" data-uid="'+filename+'"><a href="/map/'+filename+'"><img src="thumbs/'+filename+'/thumb.jpg" alt="'+filename+'"></a><a href="tools/'+filename+'" class="tools">Editer</a></li>';
+               output += '<li class="item" data-uid="'+filename+'"><a href="/map/'+filename+'"><img src="thumbs/'+filename+'/thumb.jpg" alt="'+filename+'"></a></li>';
+                //<a href="tools/'+filename+'" class="tools">Editer</a></li>';
            }
        });
        output += '<ul>'
@@ -336,6 +338,14 @@ app.get('/maps',function(req,res){
            .end(layout(_.extend(layoutDefaultOptions,{title:'liste des cartes',content:output,js:[]})));
 
    })
+});
+
+app.use('/atlas.json',express.static('atlas.json'));
+app.get('/atlas',function(req,res){
+       var output = '<div id="map"></div>';
+       res.type('html')
+           .end(layout(_.extend(layoutDefaultOptions,{title:'ensemble',classes:['atlas'],content:output,js:['atlas']})));
+
 });
 
 app.use('/tile/empty.png',express.static(__dirname+'/'+cacheRoot+emptyTileSrc));

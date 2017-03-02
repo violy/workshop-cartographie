@@ -64,18 +64,22 @@ table {
   background: #f0f0f0;
   padding: 20px;
 }
+/* line 4, ../sass/_template.scss */
+#content.atlas {
+  padding: 0;
+}
 
-/* line 6, ../sass/_template.scss */
+/* line 9, ../sass/_template.scss */
 .map-list {
   padding: 20px 0 0;
 }
-/* line 7, ../sass/_template.scss */
+/* line 10, ../sass/_template.scss */
 .map-list:after {
   content: ' ';
   display: block;
   clear: both;
 }
-/* line 13, ../sass/_template.scss */
+/* line 16, ../sass/_template.scss */
 .map-list .tools {
   position: absolute;
   top: 0;
@@ -92,12 +96,12 @@ table {
   -webkit-transition: 0.2s;
   transition: 0.2s;
 }
-/* line 25, ../sass/_template.scss */
+/* line 28, ../sass/_template.scss */
 .map-list .tools:hover {
   background: #fff;
   color: #666;
 }
-/* line 30, ../sass/_template.scss */
+/* line 33, ../sass/_template.scss */
 .map-list li {
   float: left;
   background: #fff;
@@ -111,18 +115,18 @@ table {
   -webkit-transition: 0.2s;
   transition: 0.2s;
 }
-/* line 37, ../sass/_template.scss */
+/* line 40, ../sass/_template.scss */
 .map-list li:hover {
   -moz-transform: scale(1.2, 1.2);
   -ms-transform: scale(1.2, 1.2);
   -webkit-transform: scale(1.2, 1.2);
   transform: scale(1.2, 1.2);
 }
-/* line 39, ../sass/_template.scss */
+/* line 42, ../sass/_template.scss */
 .map-list li:hover .tools {
   opacity: 1;
 }
-/* line 45, ../sass/_template.scss */
+/* line 48, ../sass/_template.scss */
 .map-list img {
   width: 128px;
   height: 128px;

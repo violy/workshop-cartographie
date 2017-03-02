@@ -1,6 +1,9 @@
 #content{
   background: #f0f0f0;
   padding: 20px;
+  &.atlas{
+    padding: 0;
+  }
 }
 
 .map-list{
