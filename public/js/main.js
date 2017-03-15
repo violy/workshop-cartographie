@@ -1,7 +1,7 @@
 $(document).ready(function(){
     var pathExp = /map\/([0-9A-Fa-f]{40})$/g,
         uidExec = pathExp.exec(location.pathname),
-        uid = uidExec ? uidExec[1] : false,
+        uid = uidExec ? uidExec[1] : $('#map').data('id-map'),
         baseWidth = 13708,
         baseHeight = 7590,
         CRSWidth = 1000,

@@ -4,7 +4,8 @@ var TILE_SIZE = config.TILE_SIZE,
     uploadRoot = config.uploadRoot,
     emptyTileSrc = config.emptyTileSrc,
     sourceFile = config.sourceFile,
-    _SHA_HASH_ = config.SHA_HASH;
+    _SHA_HASH_ = config.SHA_HASH,
+    defaultMap = config.defaultMap;
 
 var _ = require('underscore');
 
@@ -19,6 +20,8 @@ var fs = require('fs'),
 var handlebars = require('handlebars'),
     layout = handlebars.compile(fs.readFileSync('public/layout.hbs','utf-8')),
     layoutDefaultOptions = {
+        id:'map',
+        mapUid:defaultMap,
         title:'Arthur Violy - 2017 - Académie Charpentier',
         content:'...',
         classes:[],
@@ -319,7 +322,13 @@ app.use('/tools/:uid',function(req,res,next){
             res.status(404).end('carte introuvable...');
         }
     });
-})
+});
+
+app.get('/',function(req,res){
+    console.log('HOME');
+    res.type('html')
+        .end(layout(_.extend(layoutDefaultOptions,{title:'liste des cartes',content:'',js:['main']})));
+});
 
 app.get('/maps',function(req,res){
    fs.readdir(uploadRoot,function(err,files){
