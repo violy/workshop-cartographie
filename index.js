@@ -327,7 +327,7 @@ app.use('/tools/:uid',function(req,res,next){
 app.get('/',function(req,res){
     console.log('HOME');
     res.type('html')
-        .end(layout(_.extend(layoutDefaultOptions,{title:'liste des cartes',content:'',js:['main']})));
+        .end(layout(_.extend(layoutDefaultOptions,{title:'Workshop Arthur Violy',subtitle:'Assemblage des travaux produits par les étudiants de 1re année de l’Académie Charpentier',content:'',js:['main']})));
 });
 
 app.get('/maps',function(req,res){
