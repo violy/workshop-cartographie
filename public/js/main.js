@@ -11,7 +11,7 @@ $(document).ready(function(){
         host = location.host,
         cdnHost = '{s}.cdn.' + host,
         cdnSubdomains = 'abc',
-        tileTemplate = 'http://' + cdnHost + '/tile/{s}/{z}/{x}/{y}';
+        tileTemplate = location.protocol+'//' + cdnHost + '/tile/{s}/{z}/{x}/{y}';
 
     function Fail(){
         alert('désolé, une erreur est survenue...');
