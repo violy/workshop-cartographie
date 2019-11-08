@@ -7,7 +7,7 @@ jQuery(document).ready(function($){
        $el.attr('disabled',true);
        $.ajax({
            method:'POST',
-           url:'build-cache/'+uid+'/'+zoom
+           url:window.location.origin+'/build-cache/'+uid+'/'+zoom
        }).done(function(a,b,c){
            $el.removeAttr('disabled');
            $el.attr('data-duration',Math.round(10*(new Date().getTime()-t0))/10000);

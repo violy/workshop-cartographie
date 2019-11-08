@@ -23,7 +23,7 @@ jQuery(document).ready(function($){
         $('.waiting').fadeIn();
 
         $.ajax({
-            url: $form.attr('action'),
+            url: window.location.origin+$form.attr('action'),
             method: $form.attr('method'),
             type: $form.attr('method'),
             contentType: false, // obligatoire pour de l'upload
@@ -49,7 +49,7 @@ jQuery(document).ready(function($){
         $.ajax({
             method:'POST',
             dataType: 'json', // selon le retour attendu
-            url:'build-zoom/'+uid,
+            url:window.location.origin+'/build-zoom/'+uid,
         }).done(function(data){
             $('#build-progress').val(50);
             BuildCache(0);
@@ -71,7 +71,7 @@ jQuery(document).ready(function($){
         $.ajax({
             dataType: 'json', // selon le retour attendu
             method:'POST',
-            url:'build-cache/'+uid+'/'+level,
+            url:window.location.origin+'/build-cache/'+uid+'/'+level,
         }).done(function(data){
             $('#build-progress').val(60+40*level/meta.minZoom);
             BuildCache(level+1);

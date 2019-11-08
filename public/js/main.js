@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    var pathExp = /map\/([0-9A-Fa-f]{40})$/g,
+    var base_url = window.location.origin,
+        pathExp = /map\/([0-9A-Fa-f]{40})$/g,
         uidExec = pathExp.exec(location.pathname),
         uid = uidExec ? uidExec[1] : $('#map').data('id-map'),
         baseWidth = 13708,
@@ -19,7 +20,7 @@ $(document).ready(function(){
 
     if(uid){
         $.ajax({
-            url:'/meta/'+uid,
+            url:base_url+'/meta/'+uid,
             dataType:'json'
         }).done(function(data){
             meta = data;

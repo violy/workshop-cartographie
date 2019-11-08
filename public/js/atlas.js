@@ -1,6 +1,7 @@
 jQuery(document).ready(function($){
 
-    var pathExp = /map\/([0-9A-Fa-f]{40})$/g,
+    var base_url = window.location.origin,
+        pathExp = /map\/([0-9A-Fa-f]{40})$/g,
         uidExec = pathExp.exec(location.pathname),
         uid = uidExec ? uidExec[1] : false,
         baseWidth = 13708,
@@ -20,7 +21,7 @@ jQuery(document).ready(function($){
     }
 
     $.ajax({
-        url:'/atlas.json',
+        url:base_url+'/atlas.json',
         dataType:'json'
     }).done(function(data){
         atlas = data;
